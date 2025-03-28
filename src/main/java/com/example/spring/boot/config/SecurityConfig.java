@@ -1,5 +1,6 @@
 package com.example.spring.boot.config;
 
+import com.example.spring.boot.repository.UserRepository;
 import com.example.spring.boot.service.MyUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,21 +24,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    UserDetailsService userDetailsService() {
-        return new MyUserDetailsService();
+    UserDetailsService userDetailsService(UserRepository userRepository) {
+        return new MyUserDetailsService(userRepository);
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable) // Для тестов отключаем CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()
-                )
-                .logout(logout -> logout.logoutUrl("/logout")
-                        .logoutSuccessUrl("/login")
-                        .permitAll())
-                .httpBasic(Customizer.withDefaults());
+                        .requestMatchers("/admin/**").hasRole("ADMIN") // разрешаем доступ только для роли ADMIN
+                        .requestMatchers("/books/**").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated())
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll); // Включаем форму логина
         return http.build();
     }
 

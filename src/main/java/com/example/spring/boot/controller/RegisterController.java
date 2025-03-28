@@ -15,12 +15,12 @@ public class RegisterController {
 
     private final UserService userService;
 
-    @GetMapping("/admin/add-user")
+    @GetMapping("/add-user")
     public String addForm() {
         return "addUser";
     }
 
-    @PostMapping("/admin/add-user")
+    @PostMapping("/add-user")
     @ResponseBody
     public String register(@RequestBody User user) {
         if (userService.getUser(user).isPresent()) {

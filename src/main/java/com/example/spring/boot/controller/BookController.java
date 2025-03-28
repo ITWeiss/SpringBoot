@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/book")
+@RequestMapping
 @RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole(ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/books")
     public String getAllBooks(Model model) {
         List<BookDto> books = bookService.getAllBooks();
