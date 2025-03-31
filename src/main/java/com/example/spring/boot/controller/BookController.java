@@ -17,7 +17,7 @@ public class BookController {
 
     private final BookService bookService;
 
-    @PreAuthorize("hasAnyRole(ROLE_USER', 'ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole(ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/books")
     public String getAllBooks(Model model) {
         List<BookDto> books = bookService.getAllBooks();
@@ -45,7 +45,7 @@ public class BookController {
         return "redirect:/booksList";
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/books/get/{id}")
     @ResponseBody
     public BookDto getBookById(@PathVariable("id") Long id) {
