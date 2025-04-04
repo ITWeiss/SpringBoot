@@ -8,102 +8,112 @@
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <!-- Дополнительные стили для улучшения внешнего вида -->
     <style>
-        /* Основной контейнер */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+            color: #222222;
+        }
+
         .container {
-            max-width: 500px;
+            max-width: 400px;
             margin: 50px auto;
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            background-color: #ffffff;
             border-radius: 10px;
-            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        /* Заголовок страницы */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
         h1 {
+            font-size: 24px;
             text-align: center;
-            color: #333;
             margin-bottom: 30px;
+            color: #222222;
         }
 
-        /* Поля ввода */
         label {
-            display: block;
-            margin-bottom: 5px;
             font-weight: bold;
-            color: #444;
+            color: #444444;
+            display: inline-block;
+            margin-bottom: 5px;
         }
 
-        input[type="text"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 12px 20px;
-            margin-bottom: 20px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            outline: none;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        /* Общие стили для всех полей ввода */
+        input[type="text"], input[type="password"], select {
+            width: 100%; /* Ширина полей */
+            padding: 12px 20px; /* Внутренние отступы */
+            margin-bottom: 20px; /* Внешний отступ снизу */
+            border: 1px solid #ced4da; /* Граница */
+            border-radius: 6px; /* Округлость углов */
+            outline: none; /* Удаление выделения по умолчанию */
+            transition: border-color 0.15s ease-in-out; /* Анимация изменения цвета границы */
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus,
-        select:focus {
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        /* Стиль при фокусировке */
+        input[type="text"]:focus, input[type="password"]:focus, select:focus {
+            border-color: #007bff; /* Синий цвет границы при фокусировке */
         }
 
-        /* Кнопка сохранения */
-        .btn {
-            padding: 8px 20px;
-            font-size: 14px;
-            line-height: 1.5;
-            border-radius: 3px;
-            transition: all 0.15s ease-in-out;
+        button.btn-primary {
+            background-color: #007bff; /* Синий цвет кнопки */
+            border: none; /* Нет рамки */
+            border-radius: 6px; /* Округлость углов */
+            padding: 8px 20px; /* Внутренние отступы */
+            font-size: 16px; /* Размер шрифта */
+            line-height: 1.5; /* Межстрочный интервал */
+            color: #ffffff; /* Белый цвет текста */
+            cursor: pointer; /* Курсор в виде руки при наведении */
+            transition: background-color 0.15s ease-in-out; /* Анимация изменения цвета фона */
         }
 
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
+        button.btn-primary:hover {
+            background-color: #0056b3; /* Темно-синий цвет при наведении */
         }
 
-        .btn-primary:hover {
-            background-color: #0069d9;
-            border-color: #0062cc;
-        }
-
-        /* Сообщение об ошибке */
         .error-message {
-            color: red;
-            margin-top: 10px;
-            display: none;
+            color: #dc3545; /* Красный цвет ошибок */
+            margin-top: 10px; /* Отступ сверху */
+            display: none; /* Изначально скрытые ошибки */
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>ADD NEW USER</h1>
-    <form action="#" th:action="@{/users/add}" th:object="${user}" method="post" onsubmit="return validateForm();">
+    <form action="#" th:action="@{/admin/add-user}" th:object="${user}" method="post" onsubmit="return validateForm();">
         <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" th:field="*{username}" required />
+            <input type="text" id="username" th:field="*{username}" required/>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" th:field="*{password}" required />
+            <input type="password" id="password" th:field="*{password}" required/>
         </div>
         <div class="form-group">
             <label for="role">Role</label>
             <select id="role" th:field="*{role}" required>
                 <option value="">Select Role</option>
-                <option value="ROLE_USER">User</option>
-                <option value="ROLE_ADMIN">Admin</option>
+                <option value="USER">User</option>
+                <option value="ADMIN">Admin</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Сохранить</button>
         <span class="error-message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Пожалуйста, введите имя пользователя.</span>
         <span class="error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Пожалуйста, введите пароль.</span>
-        <span class="error-message" th:if="${#fields.hasErrors('role')}" th:errors="*{role}">Пожалуйста, выберите роль.</span>
+        <span class="error-message" th:if="${#fields.hasErrors('role')}"
+              th:errors="*{role}">Пожалуйста, выберите роль.</span>
     </form>
 </div>
 <!-- Скрипты Bootstrap -->
@@ -118,3 +128,5 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+
+

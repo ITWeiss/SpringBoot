@@ -1,6 +1,7 @@
 package com.example.spring.boot.controller;
 
 import com.example.spring.boot.dto.BookDto;
+import com.example.spring.boot.entity.Book;
 import com.example.spring.boot.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,7 +18,6 @@ public class BookController {
 
     private final BookService bookService;
 
-//    @PreAuthorize("hasAnyRole(ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/books")
     public String getAllBooks(Model model) {
         List<BookDto> books = bookService.getAllBooks();
@@ -25,27 +25,27 @@ public class BookController {
         return "booksList";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/books/add")
-    public String addForm() {
+    public String addForm(Model model) {
+        model.addAttribute("book", new Book());
         return "addBook";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/books/add")
     public String addBook(@ModelAttribute("book") BookDto bookDTO) {
         bookService.addBook(bookDTO);
-        return "redirect:/booksList";
+        return "redirect:/books";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/books/delete/{id}")
     public String deleteBookById(@PathVariable("id") Long id) {
         bookService.deleteBookById(id);
-        return "redirect:/booksList";
+        return "redirect:/books";
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/books/get/{id}")
     @ResponseBody
     public BookDto getBookById(@PathVariable("id") Long id) {
