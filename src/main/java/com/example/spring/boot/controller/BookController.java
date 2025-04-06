@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping
+@RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("/books")
+    @GetMapping
     public String getAllBooks(Model model) {
         List<BookDto> books = bookService.getAllBooks();
         model.addAttribute("books", books);
@@ -26,27 +26,27 @@ public class BookController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/books/add")
+    @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("book", new Book());
         return "addBook";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/books/add")
+    @PostMapping("/add")
     public String addBook(@ModelAttribute("book") BookDto bookDTO) {
         bookService.addBook(bookDTO);
         return "redirect:/books";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/books/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteBookById(@PathVariable("id") Long id) {
         bookService.deleteBookById(id);
         return "redirect:/books";
     }
 
-    @GetMapping("/books/get/{id}")
+    @GetMapping("/get/{id}")
     @ResponseBody
     public BookDto getBookById(@PathVariable("id") Long id) {
         return bookService.getBookById(id)

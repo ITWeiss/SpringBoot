@@ -1,0 +1,1 @@
+insert into public.users (username, password, roles) values ('admin','4221', 'ADMIN');
